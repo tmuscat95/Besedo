@@ -7,7 +7,7 @@ namespace Besedo.API.Data
     {
         public DbSet<User> User { get; set; }
 
-        
+
         public BesedoContext(DbContextOptions<BesedoContext> DbContextOptions) : base(DbContextOptions)
         {
 

@@ -28,7 +28,7 @@ using (var scope = app.Services.CreateScope())
 
         List<User>? movies = JsonConvert.DeserializeObject<List<User>>(s);
 
-        if(movies != null)
+        if (movies != null)
             context.User.AddRange(movies);
 
         context.SaveChanges();

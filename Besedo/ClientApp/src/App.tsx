@@ -1,19 +1,31 @@
-import React, { useRef } from "react";
-import { BrowserRouter, Route, Routes} from "react-router-dom"
-import { Layout } from "./components/Layout";
-import { Home } from "./components/Home";
-import { FetchData } from "./components/FetchData";
-import { Counter } from "./components/Counter";
-
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Layout from "./components/LayoutComponent";
+import Home from "./components/Home";
+import "antd/dist/antd.css";
 import "./custom.css";
+import ModalComponent from "./components/ModalComponent";
+import { ModalTypes } from "./types/ViewTypes";
+import { StoreProvider } from "./context/TableDataContext";
 
-type Props = {};
-const App = ({}: Props) => {
+const appName = "Besedo Test";
+const App = () => {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+    <Layout title={appName}>
+      <StoreProvider>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route
+              path="new"
+              element={<ModalComponent mode={ModalTypes.Add} />}
+            />
+            <Route
+              path="edit/*"
+              element={<ModalComponent mode={ModalTypes.Modify} />}
+            />
+          </Route>
+        </Routes>
+      </StoreProvider>
     </Layout>
   );
 };
