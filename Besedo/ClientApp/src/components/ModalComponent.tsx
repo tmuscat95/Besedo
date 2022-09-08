@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Space } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { ModalTypes } from "../types/ViewTypes";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import { UserDto, User } from "../types/DataModelTypes";
 import { Store } from "../context/TableDataContext";
 
@@ -12,21 +12,9 @@ type Props = {
 const ModalComponent = ({ mode }: Props) => {
   const title = mode === ModalTypes.Add ? "Add New User" : "Edit User";
   const navigate = useNavigate();
-  const { createUser, updateUser, deleteUser } = useContext(Store);
+  const { createUser, updateUser, deleteUser, users } = useContext(Store);
   const [form] = Form.useForm();
-  const location = useLocation();
-  const [user, setUser] = useState<User>();
-  type LocationState = {
-    record: User;
-  };
-  console.log(location.state);
 
-  useEffect(() => {
-    if (!!location.state) {
-      const { record } = location.state as LocationState;
-      setUser(record);
-    }
-  }, [location.state]);
   function onModalCancel() {
     navigate("/");
   }
@@ -57,14 +45,18 @@ const ModalComponent = ({ mode }: Props) => {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   const ipRegex =
     /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/gi;
-  const id = !!user ? user.id : NaN;
+  
+  const _id = useMatch("/edit/:id")?.params.id;
+  const id = parseInt(_id ?? "NaN");
 
-  useEffect(() => {
-    form.setFieldsValue(user);
-  }, [user,form]);
+  
+    if (!isNaN(id)) {
+        const u = users.find((u) => u.id === id);
+        form.setFieldsValue(u);
+    }
 
   return (
-    <Modal title={title} open={true} onCancel={onModalCancel} footer={null}>
+    <Modal title={title} open={true} onCancel={onModalCancel} footer={null} destroyOnClose={true}>
       <Form form={form} onFinish={onFormFinish.bind(this, id)}>
         <Form.Item label="Name" name="name" rules={validationRules}>
           <Input placeholder="John" />
