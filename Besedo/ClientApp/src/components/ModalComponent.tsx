@@ -56,6 +56,8 @@ const ModalComponent = ({ mode }: Props) => {
       navigate("/");
     }
     form.setFieldsValue(u);
+  } else if (mode === ModalTypes.Modify) {
+    navigate("/");
   }
 
   return (
