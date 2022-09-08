@@ -23,6 +23,7 @@ const App = () => {
               path="edit/*"
               element={<ModalComponent mode={ModalTypes.Modify} />}
             />
+            <Route path="/*" element={<></>} />
           </Route>
         </Routes>
       </StoreProvider>
